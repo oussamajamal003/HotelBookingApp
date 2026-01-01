@@ -2,11 +2,13 @@ const express = require("express");
 const livereload = require("livereload");
 const connectLivereload = require("connect-livereload");
 require("dotenv").config();
+const usersRoutes = require("./routes/users-routes");
 
 const app = express();
 app.use(express.json());
 
 const db = require("./config/db");
+
 
 const liveReloadServer = livereload.createServer();
 liveReloadServer.watch(__dirname);
@@ -17,6 +19,8 @@ liveReloadServer.server.once("connection", () => {
     liveReloadServer.refresh("/");
   }, 100);
 });
+
+app.use('/api/users', usersRoutes);
 
 app.get("/", (req, res) => {
   res.send("<h1>Hello Express</h1>");

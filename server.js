@@ -4,11 +4,9 @@ const connectLivereload = require("connect-livereload");
 require("dotenv").config();
 const usersRoutes = require("./routes/users-routes");
 
+
 const app = express();
 app.use(express.json());
-
-const db = require("./config/db");
-
 
 const liveReloadServer = livereload.createServer();
 liveReloadServer.watch(__dirname);

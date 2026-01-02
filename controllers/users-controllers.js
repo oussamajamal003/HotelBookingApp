@@ -1,3 +1,4 @@
+const bcrypt = require("bcrypt");
 const db = require("../config/db.js");
 
 const getUsers = (req, res) => {
@@ -7,7 +8,7 @@ const getUsers = (req, res) => {
     if (err) {
       console.log(err);
       return res.status(500).json({
-        error: "Failed to fetch users from database", 
+        error: "Failed to fetch users from database",
       });
     }
     if (data.length === 0) {
@@ -20,9 +21,44 @@ const getUsers = (req, res) => {
   });
 };
 
-const signup = (req, res, next) => {};
+const signup = async (req, res) => {
+  const { username, email, password } = req.body;
 
-const login = (req, res, next) => {};
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const q = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+  db.query(q, [username, email, hashedPassword], (err) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({
+        error: "User already exists or database error",
+      });
+    }
+    return res.status(201).json({
+      message: "User created successfully",
+    });
+  });
+};
+
+const login = async (req, res) => {
+  const { email, password } = req.body;
+  const q = "SELECT * FROM users WHERE email = ? AND password = ?";
+  db.query(q, [email, password], (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({
+        error: "Failed to login",
+      });
+    }
+    if (data.length === 0) {
+      return res.status(401).json({
+        error: "Invalid email or password",
+      });
+    }
+    return res.status(200).json({
+      message: "Login successful",
+    });
+  });
+};
 
 exports.getUsers = getUsers;
 exports.signup = signup;

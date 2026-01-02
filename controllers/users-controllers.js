@@ -39,7 +39,7 @@ const signup = async (req, res) => {
     });
   });
 };
-
+ 
 const login = async (req, res) => {
   const { email, password } = req.body;
   const q = "SELECT * FROM users WHERE email = ? AND password = ?";

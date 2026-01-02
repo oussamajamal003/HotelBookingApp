@@ -7,7 +7,7 @@ const getUsers = (req, res) => {
     if (err) {
       console.log(err);
       return res.status(500).json({
-        error: "Failed to fetch users from database",
+        error: "Failed to fetch users from database", 
       });
     }
     if (data.length === 0) {

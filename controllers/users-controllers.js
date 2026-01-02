@@ -1,5 +1,5 @@
-const bcrypt = require("bcrypt");
 const db = require("../config/db.js");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const getUsers = (req, res) => {
@@ -40,10 +40,10 @@ const signup = async (req, res) => {
   });
 };
  
-const login = async (req, res) => {
+const login = (req, res) => {
   const { email, password } = req.body;
-  const q = "SELECT * FROM users WHERE email = ? AND password = ?";
-  db.query(q, [email, password], (err, data) => {
+  const q = "SELECT * FROM users WHERE email = ?";
+  db.query(q, [email], async (err, data) => {
     if (err) {
       console.log(err);
       return res.status(500).json({
@@ -55,6 +55,23 @@ const login = async (req, res) => {
         error: "Invalid email or password",
       });
     }
+    const user = data[0];
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      user.password
+    );
+
+    if (!isPasswordCorrect) {
+      return res.status(401).json({
+        error: "Invalid email or password",
+      });
+    }
+    jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
     return res.status(200).json({
       message: "Login successful",
     });

@@ -3,13 +3,19 @@ Users can also signup as hotel partner to list their hotel rooms and manage the 
 
 Backend part: 
 First I setup mysql connection, nodemon, .gitignore then the environment variables .env but only .env.example published
+
 I depend on clean folder structure:
 
 a main file server.js where i use api/users a filter path just for user and auth routes
+
 db.js in config folder for mysql connection
+
 user routes in routes folder   
+
 controllers folder for logic and middleware functions
+
 For each api i add the route then contoller ...
+
 In users-controllers i implement:
 a get func to get all users
 a signup func to add a new user 

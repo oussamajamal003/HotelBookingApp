@@ -23,4 +23,5 @@ login func: it find user by email with bcrypt to compare password (entered in po
 then JWT jsonwebtoken will be generated only AFTER password is correct, if password is correct the token is sent
 
 The next step i will implement apis for rooms/booking and hotel and then start with frontend
+
 railway live link: https://hotelbookingapp-production-f292.up.railway.app/
